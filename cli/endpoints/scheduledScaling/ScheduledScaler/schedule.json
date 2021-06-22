@@ -1,0 +1,122 @@
+{
+    "DefaultScaleProfile": "LowUse",
+    "Days": 
+        {
+            "Monday":[
+                {
+                    "Name": "Morning",
+                    "StartTime": "00:00:00",
+                    "EndTime": "12:00:00",
+                    "ScaleProfile": "LowUse"
+                },
+                {
+                    "Name": "Afternoon",
+                    "StartTime": "12:00:00",
+                    "EndTime": "18:00:00",
+                    "ScaleProfile": "HighUse" 
+                }
+            ],
+            "Tuesday":[
+                {
+                    "Name": "Morning",
+                    "StartTime": "00:00:00",
+                    "EndTime": "12:00:00",
+                    "ScaleProfile": "LowUse"
+                },
+                {
+                    "Name": "Afternoon",
+                    "StartTime": "12:00:00",
+                    "EndTime": "20:00:00",
+                    "ScaleProfile": "HighUse" 
+                }
+            ],
+            "Wednesday":[
+                {
+                    "Name": "Morning",
+                    "StartTime": "00:00:00",
+                    "EndTime": "12:00:00",
+                    "ScaleProfile": "LowUse"
+                },
+                {
+                    "Name": "Afternoon",
+                    "StartTime": "12:00:00",
+                    "EndTime": "20:00:00",
+                    "ScaleProfile": "HighUse" 
+                }
+            ],
+            "Thursday":[
+                {
+                    "Name": "Morning",
+                    "StartTime": "00:00:00",
+                    "EndTime": "12:00:00",
+                    "ScaleProfile": "LowUse"
+                },
+                {
+                    "Name": "Afternoon",
+                    "StartTime": "12:00:00",
+                    "EndTime": "20:00:00",
+                    "ScaleProfile": "HighUse" 
+                }
+            ],
+            "Friday":[
+                {
+                    "Name": "Morning",
+                    "StartTime": "00:00:00",
+                    "EndTime": "12:00:00",
+                    "ScaleProfile": "LowUse"
+                },
+                {
+                    "Name": "Afternoon",
+                    "StartTime": "12:00:00",
+                    "EndTime": "20:00:00",
+                    "ScaleProfile": "HighUse" 
+                }
+            ],
+            "Saturday":[
+                {
+                    "Name": "Morning",
+                    "StartTime": "00:00:00",
+                    "EndTime": "12:00:00",
+                    "ScaleProfile": "LowUse"
+                },
+                {
+                    "Name": "Afternoon",
+                    "StartTime": "12:00:00",
+                    "EndTime": "20:00:00",
+                    "ScaleProfile": "HighUse" 
+                }
+            ],
+            "Sunday":[
+                {
+                    "Name": "Morning",
+                    "StartTime": "00:00:00",
+                    "EndTime": "12:00:00",
+                    "ScaleProfile": "LowUse"
+                },
+                {
+                    "Name": "Afternoon",
+                    "StartTime": "12:00:00",
+                    "EndTime": "20:00:00",
+                    "ScaleProfile": "HighUse" 
+                }
+            ]
+        },
+    "ScaleProfiles": 
+        {
+            "LowUse": {
+                "instanceCount": 2,
+                "minInstances": 2,
+                "maxInstances": 3,
+                "ScaleOutStep": 1,
+                "ScaleInStep": 3
+            },
+            "HighUse": {
+                "instanceCount": 1,
+                "minInstances": 2,
+                "maxInstances": 3,
+                "ScaleOutStep": 1,
+                "ScaleInStep": 3
+            }
+        }
+    
+}
