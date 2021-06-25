@@ -41,7 +41,7 @@
             }
         },
         "baseName": {
-            "value": "ScheduledScaler"
+            "value": "ScheduledScalerARM"
         },
         "GitHubBranch": {
             "value": "users/rowagne/create_scheduled_scaling"

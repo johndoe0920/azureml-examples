@@ -3,7 +3,7 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
       "baseName": {
-        "defaultValue": "ScheduledScaler",
+        "defaultValue": "ScheduledScalerARM",
         "type": "string",
         "metadata": {
           "description": "Name use as base-template to named the resources deployed in Azure."
@@ -21,7 +21,8 @@
       "funcAppName": "[toLower(concat(parameters('baseName')))]",
       "funcStorageName": "[tolower(concat(substring(parameters('baseName'), 0, min(length(parameters('baseName')),16)), 'stg'))]",
       "serverFarmName": "[concat(substring(parameters('baseName'), 0, min(length(parameters('baseName')),14)), '-srv')]",
-      "repoURL": "https://github.com/johndoe0920/azureml-examples.git"
+      "repoURL": "https://github.com/johndoe0920/azureml-examples.git",
+      "functionName": "[format('{0}/{1}', variables('funcAppName'), variables('funcAppName'))]"
     },
     "resources": [
       {
@@ -62,28 +63,52 @@
                 "value": "dotnet"
               },
               {
-                "name": "Project",
+                "name": "project",
                 "value": "cli/endpoints/scheduledScaling/ScheduledScaler"
               }
             ]
           }
         },
         "resources": [
-        {
-          "apiVersion": "2018-11-01",
-          "name": "web",
-          "type": "sourcecontrols",
-          "dependsOn": [
-            "[resourceId('Microsoft.Web/sites/', variables('funcAppName'))]"
-          ],
-          "properties": {
-            "RepoUrl": "[variables('repoURL')]",
-            "branch": "[parameters('GitHubBranch')]",
-            "publishRunbook": true,
-            "IsManualIntegration": true
+          {
+            "apiVersion": "2018-11-01",
+            "name": "web",
+            "type": "sourcecontrols",
+            "dependsOn": [
+              "[resourceId('Microsoft.Web/sites/', variables('funcAppName'))]"
+            ],
+            "properties": {
+              "RepoUrl": "[variables('repoURL')]",
+              "branch": "[parameters('GitHubBranch')]",
+              "publishRunbook": true,
+              "IsManualIntegration": true
+            }
+          }
+        ]
+      },
+      {
+        "type": "Microsoft.Web/sites/functions",
+        "apiVersion": "2018-11-01",
+        "name": "[variables('functionName')]",
+        "dependsOn": [
+          "[resourceId('Microsoft.Web/sites', variables('funcAppName'))]"
+        ],
+        "properties": {
+          "config": {
+            "disabled": false,
+            // "scriptFile": "../bin/ScheduledScaler.dll",
+            "entryPoint": "Microsoft.AzureML.OnlineEndpoints.RecipeFunction.ScheduledScaler.Run",
+            "bindings": [
+              {
+                "type": "timerTrigger",
+                "runOnStartup": true,
+                "schedule": "0 */1 * * * *",
+                "useMonitor": true,
+                "name": "myTimer"
+              }
+            ]
           }
         }
-      ]
       },
       {
         "type": "Microsoft.Storage/storageAccounts",
