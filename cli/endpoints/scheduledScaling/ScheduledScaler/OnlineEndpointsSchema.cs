@@ -25,6 +25,7 @@ namespace Microsoft.AzureML.OnlineEndpoints.RecipeFunction
         public ContainerResourceRequirements containerResourceRequirements { get; set; } 
         public string OSType { get; set; } 
         public string InstanceType { get; set; } 
+        
     }
 
     public class OnlineDeploymentProperties    {
@@ -33,11 +34,12 @@ namespace Microsoft.AzureML.OnlineEndpoints.RecipeFunction
         public ScaleSettings scaleSettings { get; set; } 
         public ModelReference modelReference { get; set; } 
         public DeploymentConfiguration deploymentConfiguration { get; set; } 
+        public string Type { get; set; }
     }
 
     public class Tags    {
-        public string key1 { get; set; } 
-        public string key2 { get; set; } 
+        // public string key1 { get; set; } 
+        // public string key2 { get; set; } 
     }
 
     public class OnlineDeployment    {

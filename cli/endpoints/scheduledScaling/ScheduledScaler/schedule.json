@@ -104,14 +104,14 @@
     "ScaleProfiles": 
         {
             "LowUse": {
-                "instanceCount": 2,
+                "instanceCount": 1,
                 "minInstances": 2,
                 "maxInstances": 3,
                 "ScaleOutStep": 1,
                 "ScaleInStep": 3
             },
             "HighUse": {
-                "instanceCount": 1,
+                "instanceCount": 3,
                 "minInstances": 2,
                 "maxInstances": 3,
                 "ScaleOutStep": 1,

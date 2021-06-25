@@ -1,3 +1,4 @@
+using System;
 using System.Text;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -6,6 +7,10 @@ using Microsoft.Azure.Services.AppAuthentication;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using Microsoft.Azure.Management.MachineLearningServices;
+using Microsoft.Azure.Management.MachineLearningServices.Models;
+using Microsoft.IdentityModel.Clients.ActiveDirectory;
+using Microsoft.Rest;
 
 namespace Microsoft.AzureML.OnlineEndpoints.RecipeFunction
 {
@@ -14,76 +19,85 @@ namespace Microsoft.AzureML.OnlineEndpoints.RecipeFunction
     /// </summary>
     public class OnlineEndpointsHelper
     {
-        public static async Task<OnlineDeployment> GetDeploymentResource(IConfigurationRoot config, string targetResourceId, ILogger logger)
-        {
-            using (var httpClient = new HttpClient())	
-            {
+        // public static async Task<OnlineDeploymentTrackedResource> GetDeploymentResource(
+        public static OnlineDeploymentTrackedResource GetDeploymentResource(
+            IConfigurationRoot config, 
+            AzureMachineLearningWorkspacesClient workspaceClient,
+            ILogger logger
+        ){
+            return workspaceClient.OnlineDeployments.Get(
+                    config["Endpoint"], 
+                    config["Deployment"], 
+                    config["ResourceGroup"], 
+                    config["Workspace"]
+                );
+        }
 
-                logger.LogInformation("fetching token");
-                logger.LogInformation($"targetResourceId: {targetResourceId}");
-                // Currently doesn't work
-                var accessToken = await GetToken(config, targetResourceId, logger);
+        public static AzureMachineLearningWorkspacesClient CreateMachineLearningWorkspacesClientAsync(string token, string subscriptionId)
+        {
+            TokenCredentials credential = new TokenCredentials(token);
+            AzureMachineLearningWorkspacesClient workspaceClient = new AzureMachineLearningWorkspacesClient(credential)
+            {
+                SubscriptionId = subscriptionId,
+                BaseUri = new Uri("https://management.azure.com"),
+            };
+            return workspaceClient;
+        }
+
+        public static async Task<OnlineDeploymentTrackedResource> UpdateDeploymentResource(
+            IConfigurationRoot config, 
+            OnlineDeploymentTrackedResource deployment,
+            AzureMachineLearningWorkspacesClient workspaceClient,
+            int newInstanceCount,
+            ILogger logger
+        ){
+
+            try{
+                var newManualScaleSettings = new ManualScaleSettings();
+                var newOnlineDeployment = new OnlineDeploymentTrackedResource();
+                newOnlineDeployment.Location = deployment.Location;
+                newOnlineDeployment.Tags = deployment.Tags;
+                newOnlineDeployment.Properties = deployment.Properties;
+
+                newManualScaleSettings.MaxInstances = newOnlineDeployment.Properties.ScaleSettings.MaxInstances;
+                newManualScaleSettings.MinInstances = newOnlineDeployment.Properties.ScaleSettings.MinInstances;
+                newManualScaleSettings.InstanceCount = newInstanceCount;
+
+                newOnlineDeployment.Properties.ScaleSettings = newManualScaleSettings;
+
+                OnlineDeploymentTrackedResource onlineDeploymentTrackedResource = 
+                    await workspaceClient.OnlineDeployments.CreateOrUpdateAsync(
+                        config["Endpoint"], 
+                        config["Deployment"], 
+                        config["ResourceGroup"], 
+                        config["Workspace"], 
+                        newOnlineDeployment
+                    );
+
+                return onlineDeploymentTrackedResource;
+            
+            } catch (Exception e){
                 
-                logger.LogInformation("assigning token");
-                httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
-
-                logger.LogInformation("fetching resourceUri");
-                var resourceUri = GetResourceUri(config, targetResourceId);
-                logger.LogInformation("fetched resourceUri [{0}]", resourceUri);
-
-                var responseBody = await httpClient.GetStringAsync(resourceUri);
-                // logger.LogInformation(responseBody);
-
-                var deployment = JsonConvert.DeserializeObject<OnlineDeployment>(responseBody);
-
-                return deployment;
+                logger.LogInformation($"An Exception was thrown {e.Message}");
+                throw new Exception();
             }
         }
 
-        public static async Task UpdateDeploymentResource(IConfigurationRoot config, string targetResourceId, OnlineDeployment deployment, ILogger logger)
-        {
-            using (var httpClient = new HttpClient())	
-            {
-                var accessToken = await GetToken(config, targetResourceId, logger);
-                logger.LogInformation("fetched accessToken [{0}]", accessToken);
-                httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
-
-                var resourceUri = GetResourceUri(config, targetResourceId);
-                logger.LogInformation("fetched resourceUri [{0}]", resourceUri);
-                var deploymentJson = JsonConvert.SerializeObject(deployment);
-                logger.LogInformation("fetched deploymentJson [{0}]", deploymentJson);
-                // logger.LogInformation("deploymentJson", deploymentJson);
-
-                var content = new StringContent(deploymentJson, Encoding.UTF8, "application/json");
-                await httpClient.PutAsync(resourceUri, content);
-                logger.LogInformation("HTTP PUT Done");
-            }
-        }
-
-        private static async Task<string> GetToken(IConfigurationRoot config, string targetResourceId, ILogger logger)
+        public static async Task<string> GetToken(IConfigurationRoot config, ILogger logger)
         {
             // Read access token from config
             var accessToken = config["AuthToken"];
+            logger.LogInformation("Fetching access token");
+
             if (string.IsNullOrWhiteSpace(accessToken))
             {
                 // Get access token
                 var azureServiceTokenProvider = new AzureServiceTokenProvider();
-                // accessToken = await azureServiceTokenProvider.GetAccessTokenAsync("https://management.azure.com");
-                accessToken = await azureServiceTokenProvider.GetAccessTokenAsync(targetResourceId);
+                accessToken = await azureServiceTokenProvider.GetAccessTokenAsync("https://management.azure.com");
             }
+
+            logger.LogInformation($"Successfully retrieved a token");
             return accessToken;
-        }
-
-        private static string GetResourceUri(IConfigurationRoot config, string targetResourceId)
-        {
-            var armUri = config["ArmUri"];
-
-            if (string.IsNullOrWhiteSpace(armUri))
-            {
-                armUri = "https://management.azure.com:443";
-            }
-
-            return string.Concat(armUri, "/", targetResourceId, "?api-version=2020-12-01-preview");
         }
     }
 }
