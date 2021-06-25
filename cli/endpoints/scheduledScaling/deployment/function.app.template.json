@@ -3,14 +3,7 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
       "baseName": {
-        "defaultValue": "SchduledScaler",
-        "type": "string",
-        "metadata": {
-          "description": "Name use as base-template to named the resources deployed in Azure."
-        }
-      },
-      "appName": {
-        "defaultValue": "SchduledScaler",
+        "defaultValue": "ScheduledScaler",
         "type": "string",
         "metadata": {
           "description": "Name use as base-template to named the resources deployed in Azure."
@@ -18,16 +11,9 @@
       },
       "GitHubBranch": {
         "type": "string",
-        "defaultValue": "rowagne/create_schedule_scaling",
+        "defaultValue": "users/rowagne/create_scheduled_scaling",
         "metadata": {
           "description": "Name of the branch to use when deploying (Default = main)."
-        }
-      },
-      "MonitorStorageName": {
-        "type": "string",
-        "defaultValue": "dropzone",
-        "metadata": {
-          "description": "Name of the storage account where the files will be drop and unziped. (Default = dropzone)."
         }
       }
     },
@@ -55,70 +41,49 @@
           "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('serverFarmName'))]",
           "siteConfig": {
             "appSettings": [
-              // {
-              //   "name": "AzureWebJobsDashboard",
-              //   "value": "[concat('DefaultEndpointsProtocol=https;AccountName=', variables('funcStorageName'), ';AccountKey=', listKeys(variables('funcStorageName'),'2015-05-01-preview').key1)]"
-              // },
-              // {
-              //   "name": "AzureWebJobsStorage",
-              //   "value": "[concat('DefaultEndpointsProtocol=https;AccountName=', variables('funcStorageName'), ';AccountKey=', listKeys(variables('funcStorageName'),'2015-05-01-preview').key1)]"
-              // },
-              // {
-              //   "name": "WEBSITE_CONTENTAZUREFILECONNECTIONSTRING",
-              //   "value": "[concat('DefaultEndpointsProtocol=https;AccountName=', variables('funcStorageName'), ';AccountKey=', listKeys(variables('funcStorageName'),'2015-05-01-preview').key1)]"
-              // },
-              // {
-              //   "name": "WEBSITE_CONTENTSHARE",
-              //   "value": "[variables('funcAppName')]"
-              // },
+              {
+                "name": "AzureWebJobsStorage",
+                "value": "[concat('DefaultEndpointsProtocol=https;AccountName=', variables('funcStorageName'), ';AccountKey=', listKeys(variables('funcStorageName'),'2015-05-01-preview').key1)]"
+              },
+              {
+                "name": "WEBSITE_CONTENTAZUREFILECONNECTIONSTRING",
+                "value": "[concat('DefaultEndpointsProtocol=https;AccountName=', variables('funcStorageName'), ';AccountKey=', listKeys(variables('funcStorageName'),'2015-05-01-preview').key1)]"
+              },
+              {
+                "name": "WEBSITE_CONTENTSHARE",
+                "value": "[variables('funcAppName')]"
+              },
               {
                 "name": "FUNCTIONS_EXTENSION_VERSION",
                 "value": "~3"
               },
-              // {
-              //   "name": "FUNCTIONS_WORKER_RUNTIME",
-              //   "value": "dotnet"
-              // },
+              {
+                "name": "FUNCTIONS_WORKER_RUNTIME",
+                "value": "dotnet"
+              },
               {
                 "name": "Project",
-                "value": "cli/endpoints/scheduledScaling/"
+                "value": "cli/endpoints/scheduledScaling/ScheduledScaler"
               }
             ]
           }
         },
         "resources": [
-            {
-                "apiVersion": "2018-11-01",
-                "name": "appsettings",
-                "type": "config",
-                "dependsOn": [
-                  "[resourceId('Microsoft.Web/Sites', variables('funcAppName'))]",
-                  "[resourceId('Microsoft.Web/Sites/sourcecontrols', variables('funcAppName'), 'web')]",
-                  "[resourceId('Microsoft.Storage/storageAccounts', variables('funcStorageName'))]"
-                ],
-                "properties": {
-                    "AzureWebJobsStorage": "[concat('DefaultEndpointsProtocol=https;AccountName=', variables('funcStorageName'), ';AccountKey=', listKeys(variables('funcStorageName'),'2019-06-01').keys[0].value)]",
-                    "AzureWebJobsDashboard": "[concat('DefaultEndpointsProtocol=https;AccountName=', variables('funcStorageName'), ';AccountKey=', listKeys(variables('funcStorageName'),'2019-06-01').keys[0].value)]",
-                    "FUNCTIONS_EXTENSION_VERSION": "~3",
-                    "FUNCTIONS_WORKER_RUNTIME": "dotnet",
-                    "Project": "cli/endpoints/scheduledScaling/"
-                }
-            },
-            {
-              "apiVersion": "2018-11-01",
-              "name": "web",
-              "type": "sourcecontrols",
-              "dependsOn": [
-                "[resourceId('Microsoft.Web/sites/', variables('funcAppName'))]"
-              ],
-              "properties": {
-                "RepoUrl": "[variables('repoURL')]",
-                "branch": "[parameters('GitHubBranch')]",
-                "publishRunbook": true,
-                "IsManualIntegration": true
-              }
-            }
-        ]
+        {
+          "apiVersion": "2018-11-01",
+          "name": "web",
+          "type": "sourcecontrols",
+          "dependsOn": [
+            "[resourceId('Microsoft.Web/sites/', variables('funcAppName'))]"
+          ],
+          "properties": {
+            "RepoUrl": "[variables('repoURL')]",
+            "branch": "[parameters('GitHubBranch')]",
+            "publishRunbook": true,
+            "IsManualIntegration": true
+          }
+        }
+      ]
       },
       {
         "type": "Microsoft.Storage/storageAccounts",
@@ -171,44 +136,6 @@
           "computeMode": "Dynamic"
         }
       }
-      // ,
-      // {
-      //   "type": "Microsoft.Storage/storageAccounts",
-      //   "apiVersion": "2018-07-01",
-      //   "name": "[variables('fileStorageName')]",
-      //   "location": "[resourceGroup().location]",
-      //   "tags": {
-      //     "displayName": "[variables('fileStorageName')]"
-      //   },
-      //   "sku": {
-      //     "name": "Standard_LRS"
-      //   },
-      //   "kind": "StorageV2"
-        // "resources": [
-        //   {
-        //     "type": "blobServices/containers",
-        //     "apiVersion": "2018-07-01",
-        //     "name": "[concat('default/', 'input-files')]",
-        //     "dependsOn": [
-        //       "[variables('fileStorageName')]"
-        //     ],
-        //     "properties": {
-        //       "publicAccess": "Blob"
-        //     }
-        //   },
-        //   {
-        //     "type": "blobServices/containers",
-        //     "apiVersion": "2018-07-01",
-        //     "name": "[concat('default/', 'schdeuled-scaler')]",
-        //     "dependsOn": [
-        //       "[variables('fileStorageName')]"
-        //     ],
-        //     "properties": {
-        //       "publicAccess": "Blob"
-        //     }
-        //   }
-        // ]
-      // }
     ],
     "outputs": {}
   }

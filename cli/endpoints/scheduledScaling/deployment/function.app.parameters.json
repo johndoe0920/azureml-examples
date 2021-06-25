@@ -2,13 +2,6 @@
     "$": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-        "appName": {
-            "type": "string",
-            "defaultValue": "[concat('fnapp', uniqueString(resourceGroup().id))]",
-            "metadata": {
-                "description": "The name of the function app that you wish to create."
-            }
-        },
         "storageAccountType": {
             "type": "string",
             "defaultValue": "Standard_LRS",
@@ -48,13 +41,10 @@
             }
         },
         "baseName": {
-            "value": "ScheduledScaler2"
+            "value": "ScheduledScaler"
         },
         "GitHubBranch": {
-            "value": "main"
-        },
-        "MonitorStorageName": {
-            "value": "dropzone"
+            "value": "users/rowagne/create_scheduled_scaling"
         }
     }
 }
