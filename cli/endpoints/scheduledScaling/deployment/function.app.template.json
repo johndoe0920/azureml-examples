@@ -96,7 +96,7 @@
         "properties": {
           "config": {
             "disabled": false,
-            // "scriptFile": "../bin/ScheduledScaler.dll",
+            "scriptFile": "../bin/ScheduledScaler.dll",
             "entryPoint": "Microsoft.AzureML.OnlineEndpoints.RecipeFunction.ScheduledScaler.Run",
             "bindings": [
               {
