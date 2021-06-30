@@ -1,14 +1,9 @@
-using Azure.Storage.Blobs;
-using Azure.Storage.Blobs.Models;
-using System;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Azure.WebJobs;
-using Microsoft.Azure.WebJobs.Host;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
 using Microsoft.Azure.Management.MachineLearningServices;
 using Microsoft.Azure.Management.MachineLearningServices.Models;
+using Microsoft.Azure.WebJobs;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 
 namespace Microsoft.AzureML.OnlineEndpoints.RecipeFunction
 {
@@ -16,7 +11,7 @@ namespace Microsoft.AzureML.OnlineEndpoints.RecipeFunction
     {
         [FunctionName("ScheduledScaler")]
         public static void Run(
-            [TimerTrigger("0 */1 * * * *", RunOnStartup=true)]TimerInfo myTimer,
+            [TimerTrigger("0 */1 * * * *", RunOnStartup=true)]TimerInfo scalingTimer,
             ExecutionContext context,
             ILogger logger
         ){

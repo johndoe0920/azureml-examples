@@ -3,7 +3,7 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
       "baseName": {
-        "defaultValue": "ScheduledScalerARM",
+        "defaultValue": "ScheduledScaler",
         "type": "string",
         "metadata": {
           "description": "Name use as base-template to named the resources deployed in Azure."
@@ -15,6 +15,13 @@
         "metadata": {
           "description": "Name of the branch to use when deploying (Default = main)."
         }
+      },
+      "appInsightsLocation": {
+        "type": "string",
+        "defaultValue": "westus2",
+        "metadata": {
+          "description": "Location for Application Insights"
+        }
       }
     },
     "variables": {
@@ -22,11 +29,11 @@
       "funcStorageName": "[tolower(concat(substring(parameters('baseName'), 0, min(length(parameters('baseName')),16)), 'stg'))]",
       "serverFarmName": "[concat(substring(parameters('baseName'), 0, min(length(parameters('baseName')),14)), '-srv')]",
       "repoURL": "https://github.com/johndoe0920/azureml-examples.git",
-      "functionName": "[format('{0}/{1}', variables('funcAppName'), variables('funcAppName'))]"
+      "applicationInsightsName": "[parameters('baseName')]"
     },
     "resources": [
       {
-        "apiVersion": "2018-11-01",
+        "apiVersion": "2019-08-01",
         "type": "Microsoft.Web/sites",
         "name": "[variables('funcAppName')]",
         "location": "[resourceGroup().location]",
@@ -65,13 +72,17 @@
               {
                 "name": "project",
                 "value": "cli/endpoints/scheduledScaling/ScheduledScaler"
+              },
+              {
+                "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
+                "value": "[reference(resourceId('microsoft.insights/components', variables('applicationInsightsName')), '2020-02-02-preview').InstrumentationKey]"
               }
             ]
           }
         },
         "resources": [
           {
-            "apiVersion": "2018-11-01",
+            "apiVersion": "2019-08-01",
             "name": "web",
             "type": "sourcecontrols",
             "dependsOn": [
@@ -87,30 +98,6 @@
         ]
       },
       {
-        "type": "Microsoft.Web/sites/functions",
-        "apiVersion": "2018-11-01",
-        "name": "[variables('functionName')]",
-        "dependsOn": [
-          "[resourceId('Microsoft.Web/sites', variables('funcAppName'))]"
-        ],
-        "properties": {
-          "config": {
-            "disabled": false,
-            "scriptFile": "../bin/ScheduledScaler.dll",
-            "entryPoint": "Microsoft.AzureML.OnlineEndpoints.RecipeFunction.ScheduledScaler.Run",
-            "bindings": [
-              {
-                "type": "timerTrigger",
-                "runOnStartup": true,
-                "schedule": "0 */1 * * * *",
-                "useMonitor": true,
-                "name": "myTimer"
-              }
-            ]
-          }
-        }
-      },
-      {
         "type": "Microsoft.Storage/storageAccounts",
         "apiVersion": "2018-07-01",
         "name": "[variables('funcStorageName')]",
@@ -123,17 +110,6 @@
         },
         "kind": "StorageV2",
         "resources": [
-          {
-            "type": "blobServices/containers",
-            "apiVersion": "2018-07-01",
-            "name": "[concat('default/', 'input-files')]",
-            "dependsOn": [
-              "[variables('funcStorageName')]"
-            ],
-            "properties": {
-              "publicAccess": "Blob"
-            }
-          },
           {
             "type": "blobServices/containers",
             "apiVersion": "2018-07-01",
@@ -159,6 +135,19 @@
         "properties": {
           "name": "[variables('serverFarmName')]",
           "computeMode": "Dynamic"
+        }
+      },
+      {
+        "type": "microsoft.insights/components",
+        "apiVersion": "2020-02-02-preview",
+        "name": "[variables('applicationInsightsName')]",
+        "location": "[parameters('appInsightsLocation')]",
+        "tags": {
+          "[concat('hidden-link:', resourceId('Microsoft.Web/sites', variables('applicationInsightsName')))]": "Resource"
+        },
+        "properties": {
+          "ApplicationId": "[variables('applicationInsightsName')]",
+          "Request_Source": "IbizaWebAppExtensionCreate"
         }
       }
     ],

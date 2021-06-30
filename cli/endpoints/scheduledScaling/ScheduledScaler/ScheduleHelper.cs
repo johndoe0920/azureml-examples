@@ -1,9 +1,9 @@
 using System;
 using System.IO;
-using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
 using Microsoft.Azure.Storage;
 using Microsoft.Azure.Storage.Blob;
+using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 
 namespace Microsoft.AzureML.OnlineEndpoints.RecipeFunction
 {
@@ -19,7 +19,7 @@ namespace Microsoft.AzureML.OnlineEndpoints.RecipeFunction
             string scheduleFileName
         ){
 
-            CloudStorageAccount storageAccount = CloudStorageAccount.Parse(connectionString);
+            CloudStorageAccount storageAccount = CloudStorageAccount.Parse(System.Environment.GetEnvironmentVariable("AzureWebJobsStorage"));
             CloudBlobClient blobClient = storageAccount.CreateCloudBlobClient();
             CloudBlobContainer container = blobClient.GetContainerReference(containerName);
             CloudBlockBlob blockBlob = container.GetBlockBlobReference(scheduleFileName);

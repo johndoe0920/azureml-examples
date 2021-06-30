@@ -1,15 +1,11 @@
 using System;
-using System.Text;
-using System.Net.Http;
-using System.Net.Http.Headers;
 using System.Threading.Tasks;
+using Microsoft.Azure.Management.MachineLearningServices;
+using Microsoft.Azure.Management.MachineLearningServices.Models;
 using Microsoft.Azure.Services.AppAuthentication;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
-using Microsoft.Azure.Management.MachineLearningServices;
-using Microsoft.Azure.Management.MachineLearningServices.Models;
-using Microsoft.IdentityModel.Clients.ActiveDirectory;
+
 using Microsoft.Rest;
 
 namespace Microsoft.AzureML.OnlineEndpoints.RecipeFunction

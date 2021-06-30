@@ -8,6 +8,5 @@
     "ContainerName": "scheduled-scaler",
     "ScheduleFileName": "schedule.json",
     "ArmUri": "https://westus2.management.azure.com",
-    "AuthToken": "",
-    "AzureStorageConnectionString": "DefaultEndpointsProtocol=https;AccountName=rowagnews0944184036;AccountKey=JPvw7cA9ToaKQT6XRMCoxgb0ATF1TdzYSdZLlhs/1a9GuHTMnRHUcovRcb75MzDsK/wfciTAf1sBfcJqmEryhw==;EndpointSuffix=core.windows.net"
+    "AuthToken": ""
   }
