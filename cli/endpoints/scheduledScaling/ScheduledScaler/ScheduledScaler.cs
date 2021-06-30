@@ -20,7 +20,7 @@ namespace Microsoft.AzureML.OnlineEndpoints.RecipeFunction
 
             logger.LogInformation($"Fetching schedule file");
             dynamic scheduleJson = ScheduleHelper.ReadScheduleJson(
-                config["AzureStorageConnectionString"], config["ContainerName"], config["ScheduleFileName"] );
+                config["AzureStorageConnectionString"], config["ContainerName"], config["ScheduleFileName"]);
 
             logger.LogInformation($"Fetching scale profile");
             var scaleProfile = ScheduleHelper.GetScaleProfile(scheduleJson, logger);

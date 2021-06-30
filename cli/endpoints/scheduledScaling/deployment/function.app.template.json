@@ -113,7 +113,7 @@
           {
             "type": "blobServices/containers",
             "apiVersion": "2018-07-01",
-            "name": "[concat('default/', 'schdeuled-scaler')]",
+            "name": "[concat('default/', 'scheduled-scaler')]",
             "dependsOn": [
               "[variables('funcStorageName')]"
             ],
