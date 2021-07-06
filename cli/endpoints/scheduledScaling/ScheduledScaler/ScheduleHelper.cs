@@ -18,28 +18,26 @@ namespace Microsoft.AzureML.OnlineEndpoints.RecipeFunction
             string containerName, 
             string scheduleFileName
         ){
-            // CloudStorageAccount storageAccount = CloudStorageAccount.Parse(System.Environment.GetEnvironmentVariable("AzureWebJobsStorage"));
-            // CloudBlobClient blobClient = storageAccount.CreateCloudBlobClient();
-            // CloudBlobContainer container = blobClient.GetContainerReference(containerName);
-            // CloudBlockBlob blockBlob = container.GetBlockBlobReference(scheduleFileName);
+            CloudStorageAccount storageAccount = CloudStorageAccount.Parse(System.Environment.GetEnvironmentVariable("AzureWebJobsStorage"));
+            CloudBlobClient blobClient = storageAccount.CreateCloudBlobClient();
+            CloudBlobContainer container = blobClient.GetContainerReference(containerName);
+            CloudBlockBlob blockBlob = container.GetBlockBlobReference(scheduleFileName);
 
-            // string text;
-            // using (var memoryStream = new MemoryStream())
-            // {
-            //     blockBlob.DownloadToStream(memoryStream);
-            //     text = System.Text.Encoding.UTF8.GetString(memoryStream.ToArray());
-            // }
+            string text;
+            using (var memoryStream = new MemoryStream())
+            {
+                blockBlob.DownloadToStream(memoryStream);
+                text = System.Text.Encoding.UTF8.GetString(memoryStream.ToArray());
+            }
 
-            // return JsonConvert.DeserializeObject(text);
+            return JsonConvert.DeserializeObject<ScaleSchedule>(text);
 
             /* 
             For testing only!
             */
 
             // var text = File.ReadAllText(scheduleFileName);
-
-            var text = File.ReadAllText(scheduleFileName);
-            return JsonConvert.DeserializeObject<ScaleSchedule>(text);
+            // return JsonConvert.DeserializeObject<ScaleSchedule>(text);
 
         }
         

@@ -7,9 +7,6 @@
         },
         "GitHubBranch": {
             "value": "users/rowagne/create_scheduled_scaling"
-        },
-        "appInsightsLocation": {
-            "value": "westus2"
         }
     }
 }
