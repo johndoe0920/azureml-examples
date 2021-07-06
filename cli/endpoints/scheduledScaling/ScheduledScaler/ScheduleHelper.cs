@@ -46,7 +46,10 @@ namespace Microsoft.AzureML.OnlineEndpoints.RecipeFunction
             ILogger logger
         ){
             logger.LogInformation($"Retrieving Default Scale Profile");
-            var profileName = scheduleJson.DefaultScaleProfile;
+            String profileName = scheduleJson.DefaultScaleProfile;
+            if(String.IsNullOrEmpty(profileName)){
+                logger.LogWarning("DefaultScaleProfile is not set in schedule JSON file. Please consider designating a default scale profile!");
+            }
             var currentTime = DateTime.Now.ToString("HH:mm:ss");
             var dayOfWeek = DateTime.Now.DayOfWeek;
             ScaleProfile[] timeProfiles = null;
@@ -67,7 +70,6 @@ namespace Microsoft.AzureML.OnlineEndpoints.RecipeFunction
                     if (currentTimeSpan >= startTime && currentTimeSpan <= endTime)
                     {
                         logger.LogInformation($"Current time fits into {timeProfile.Name} time slot");
-                        // profileName = timeSlot["ScaleProfile"].ToString();
                         profileName = timeProfile.DeploymentProfile;
                     }
                 } else {

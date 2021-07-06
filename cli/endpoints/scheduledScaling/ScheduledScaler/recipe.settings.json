@@ -6,6 +6,5 @@
     "Endpoint": "rowagne-bad-ep-1",
     "Deployment": "blue-1",
     "ContainerName": "scheduled-scaler",
-    "ScheduleFileName": "schedule.json",
-    "AzureWebJobsStorage": "DefaultEndpoint"
+    "ScheduleFileName": "schedule.json"
   }

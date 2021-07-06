@@ -44,19 +44,18 @@ namespace Microsoft.AzureML.OnlineEndpoints.RecipeFunction
                 var result = UpdateOnlineDeployment(config, onlineDeployment, workspaceClient, deploymentProfile, logger);
                 logger.LogInformation($"Successfully updated deployment {config["Deployment"]}");
             }
-
         }
 
         static bool CompareDeploymentSettings(
-            DeploymentProfile deploymentProfile, 
+            DeploymentProfile desiredDeploymentProfile, 
             OnlineDeploymentTrackedResource deployment, 
             ILogger logger
         ){
-            var deploymentScaleSettings = deployment.Properties.ScaleSettings as ManualScaleSettings;
-            logger.LogInformation($"Current instanceCount setting: {deploymentScaleSettings.InstanceCount}");
-            logger.LogInformation($"Scheduled instanceCount setting: {deploymentProfile.instanceCount}");
+            var currentDeploymentProfile = deployment.Properties.ScaleSettings as ManualScaleSettings;
+            logger.LogInformation($"Current instanceCount setting: {currentDeploymentProfile.InstanceCount}");
+            logger.LogInformation($"Scheduled instanceCount setting: {desiredDeploymentProfile.instanceCount}");
 
-            if (deploymentScaleSettings.InstanceCount != deploymentProfile.instanceCount){
+            if (currentDeploymentProfile.InstanceCount != desiredDeploymentProfile.instanceCount){
                 logger.LogInformation("instanceCount settings don't match! Need to update deployment!");
                 return true;
             }
