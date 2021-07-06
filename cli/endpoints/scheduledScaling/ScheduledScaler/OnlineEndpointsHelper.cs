@@ -92,7 +92,7 @@ namespace Microsoft.AzureML.OnlineEndpoints.RecipeFunction
                 accessToken = await azureServiceTokenProvider.GetAccessTokenAsync("https://management.azure.com");
             }
 
-            logger.LogInformation($"Successfully retrieved a token");
+            logger.LogInformation("Successfully retrieved a token");
             return accessToken;
         }
     }
