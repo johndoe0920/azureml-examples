@@ -17,44 +17,46 @@ namespace Microsoft.AzureML.OnlineEndpoints.RecipeFunction
         ){
 
             var config = ConfigurationHelper.GetConfiguration(context.FunctionAppDirectory, logger);
+            ConfigurationHelper.VerifyConfigValues(config, logger);
 
-            logger.LogInformation($"Fetching schedule file");
-            dynamic scheduleJson = ScheduleHelper.ReadScheduleJson(
+            logger.LogInformation($"Fetching schedule file {config["ScheduleFileName"]} in container {config["ContainerName"]}");
+            ScaleSchedule scheduleJson = ScheduleHelper.ReadScheduleJson(
                 config["AzureStorageConnectionString"], config["ContainerName"], config["ScheduleFileName"]);
-
-            logger.LogInformation($"Fetching scale profile");
-            var scaleProfile = ScheduleHelper.GetScaleProfile(scheduleJson, logger);
-            logger.LogInformation($"Scale profile to use is {scaleProfile}");
+            logger.LogInformation("Successfully retrieved schedule file");
+            
+            logger.LogInformation("Determining which scale profile to use");
+            var deploymentProfile = ScheduleHelper.GetScaleProfile(scheduleJson, logger);
+            logger.LogInformation($"Scale profile to use is {deploymentProfile.Name}");
 
             var accessToken = OnlineEndpointsHelper.GetToken(config, logger).Result;
             logger.LogInformation($"Getting workspace client");
             var workspaceClient = OnlineEndpointsHelper.CreateMachineLearningWorkspacesClientAsync(accessToken, config["Subscription"]);
             logger.LogInformation($"Got workspace client");
             
-            logger.LogInformation($"Getting onlineDeployment");
+            logger.LogInformation($"Getting config for deployment {config["Deployment"]}");
             var onlineDeployment = OnlineEndpointsHelper.GetDeploymentResource(config, workspaceClient, logger);
-            logger.LogInformation($"Got onlineDeployment");
+            logger.LogInformation($"Successfully retrieved config for deployment {config["Deployment"]}");
 
-            var changeNeeded = CompareDeploymentSettings(scaleProfile, onlineDeployment, logger); 
+            var changeNeeded = CompareDeploymentSettings(deploymentProfile, onlineDeployment, logger);
 
             if (changeNeeded){
-                UpdateOnlineDeployment(config, onlineDeployment, workspaceClient, scaleProfile, logger);
-                logger.LogInformation("Done Updating Deployment");
+                logger.LogInformation($"Updating deployment {config["Deployment"]}");
+                var result = UpdateOnlineDeployment(config, onlineDeployment, workspaceClient, deploymentProfile, logger);
+                logger.LogInformation($"Successfully updated deployment {config["Deployment"]}");
             }
 
         }
 
         static bool CompareDeploymentSettings(
-            dynamic scaleProfile, 
+            DeploymentProfile deploymentProfile, 
             OnlineDeploymentTrackedResource deployment, 
             ILogger logger
         ){
-
             var deploymentScaleSettings = deployment.Properties.ScaleSettings as ManualScaleSettings;
             logger.LogInformation($"Current instanceCount setting: {deploymentScaleSettings.InstanceCount}");
-            logger.LogInformation($"Scheduled instanceCount setting: {scaleProfile["instanceCount"].ToString()}");
+            logger.LogInformation($"Scheduled instanceCount setting: {deploymentProfile.instanceCount}");
 
-            if (deploymentScaleSettings.InstanceCount != (int)scaleProfile["instanceCount"]){
+            if (deploymentScaleSettings.InstanceCount != deploymentProfile.instanceCount){
                 logger.LogInformation("instanceCount settings don't match! Need to update deployment!");
                 return true;
             }
@@ -67,10 +69,10 @@ namespace Microsoft.AzureML.OnlineEndpoints.RecipeFunction
             IConfigurationRoot config, 
             OnlineDeploymentTrackedResource onlineDeployment, 
             AzureMachineLearningWorkspacesClient workspaceClient,
-            dynamic scaleProfile,
+            DeploymentProfile deploymentProfile,
             ILogger logger
         ){
-            await OnlineEndpointsHelper.UpdateDeploymentResource(config, onlineDeployment, workspaceClient, (int)scaleProfile["instanceCount"], logger);
+            await OnlineEndpointsHelper.UpdateDeploymentResource(config, onlineDeployment, workspaceClient, deploymentProfile.instanceCount, logger);
         }
 
         

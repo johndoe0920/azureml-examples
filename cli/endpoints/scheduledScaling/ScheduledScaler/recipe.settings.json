@@ -7,6 +7,5 @@
     "Deployment": "blue-1",
     "ContainerName": "scheduled-scaler",
     "ScheduleFileName": "schedule.json",
-    "ArmUri": "https://westus2.management.azure.com",
-    "AuthToken": ""
+    "AzureWebJobsStorage": "DefaultEndpoint"
   }

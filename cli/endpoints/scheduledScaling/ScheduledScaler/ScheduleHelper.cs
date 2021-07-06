@@ -13,67 +13,87 @@ namespace Microsoft.AzureML.OnlineEndpoints.RecipeFunction
     public class ScheduleHelper
     {
 
-        public static dynamic ReadScheduleJson(
+        public static ScaleSchedule ReadScheduleJson(
             string connectionString,
             string containerName, 
             string scheduleFileName
         ){
+            // CloudStorageAccount storageAccount = CloudStorageAccount.Parse(System.Environment.GetEnvironmentVariable("AzureWebJobsStorage"));
+            // CloudBlobClient blobClient = storageAccount.CreateCloudBlobClient();
+            // CloudBlobContainer container = blobClient.GetContainerReference(containerName);
+            // CloudBlockBlob blockBlob = container.GetBlockBlobReference(scheduleFileName);
 
-            CloudStorageAccount storageAccount = CloudStorageAccount.Parse(System.Environment.GetEnvironmentVariable("AzureWebJobsStorage"));
-            CloudBlobClient blobClient = storageAccount.CreateCloudBlobClient();
-            CloudBlobContainer container = blobClient.GetContainerReference(containerName);
-            CloudBlockBlob blockBlob = container.GetBlockBlobReference(scheduleFileName);
+            // string text;
+            // using (var memoryStream = new MemoryStream())
+            // {
+            //     blockBlob.DownloadToStream(memoryStream);
+            //     text = System.Text.Encoding.UTF8.GetString(memoryStream.ToArray());
+            // }
 
-            string text;
-            using (var memoryStream = new MemoryStream())
-            {
-                blockBlob.DownloadToStream(memoryStream);
-                text = System.Text.Encoding.UTF8.GetString(memoryStream.ToArray());
-            }
-
-            return JsonConvert.DeserializeObject(text);
+            // return JsonConvert.DeserializeObject(text);
 
             /* 
             For testing only!
             */
 
             // var text = File.ReadAllText(scheduleFileName);
-            // return JsonConvert.DeserializeObject(text);
+
+            var text = File.ReadAllText(scheduleFileName);
+            return JsonConvert.DeserializeObject<ScaleSchedule>(text);
 
         }
         
-        public static dynamic GetScaleProfile(
-            dynamic scheduleJson, 
+        public static DeploymentProfile GetScaleProfile(
+            ScaleSchedule scheduleJson, 
             ILogger logger
         ){
-
-            var profileName = scheduleJson["DefaultScaleProfile"].ToString();
+            logger.LogInformation($"Retrieving Default Scale Profile");
+            var profileName = scheduleJson.DefaultScaleProfile;
             var currentTime = DateTime.Now.ToString("HH:mm:ss");
             var dayOfWeek = DateTime.Now.DayOfWeek;
-            var times = scheduleJson["Days"][dayOfWeek.ToString()];
+            ScaleProfile[] timeProfiles = null;
 
-            foreach (dynamic timeSlot in times){
-                var startTime = TimeSpan.Parse(timeSlot["StartTime"].ToString());
-                var endTime = TimeSpan.Parse(timeSlot["EndTime"].ToString());
+            foreach(var t in scheduleJson.Days){
+                if (t.Name.Equals(dayOfWeek.ToString())){
+                    timeProfiles = t.Profiles;
+                }
+            }
+
+            foreach (var timeProfile in timeProfiles){
+                var startTime = TimeSpan.Parse(timeProfile.StartTime);
+                var endTime = TimeSpan.Parse(timeProfile.EndTime);
                 var currentTimeSpan = TimeSpan.Parse(currentTime);
 
                 if (startTime <= endTime) {
                     // start and stop times are in the same day
                     if (currentTimeSpan >= startTime && currentTimeSpan <= endTime)
                     {
-                        logger.LogInformation($"Current time fits into {timeSlot.Name} time slot.");
-                        profileName = timeSlot["ScaleProfile"].ToString();
+                        logger.LogInformation($"Current time fits into {timeProfile.Name} time slot");
+                        // profileName = timeSlot["ScaleProfile"].ToString();
+                        profileName = timeProfile.DeploymentProfile;
                     }
                 } else {
                     // start and stop times are in different days
                     if (currentTimeSpan >= startTime || currentTimeSpan <= endTime) {
                     // current time is between start and stop
-                        logger.LogInformation($"Current time fits into {timeSlot.Name} time slot.");
-                        profileName = timeSlot["ScaleProfile"].ToString();
+                        logger.LogInformation($"Current time fits into {timeProfile.Name} time slot");
+                        profileName = timeProfile.DeploymentProfile;
                     }
                 }
             }
-            return scheduleJson["ScaleProfiles"][profileName];
+
+            bool profileExists = false;
+            foreach(var profile in scheduleJson.DeploymentProfiles){
+                if (profile.Name.Equals(profileName)){
+                    profileExists = true;
+                    return profile;
+                }
+            }
+
+            if (!profileExists){
+                throw new ArgumentException($"{profileName} does not exist as a DeploymentProfile in the schedule json file. Please confirm it exists.");
+            }
+            return null;
         }
     }
 }

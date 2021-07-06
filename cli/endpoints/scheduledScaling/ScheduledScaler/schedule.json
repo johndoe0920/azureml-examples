@@ -1,122 +1,142 @@
 {
     "DefaultScaleProfile": "LowUse",
-    "Days": 
+    "Days": [
         {
-            "Monday":[
+            "Name": "Monday",
+            "Profiles": [
                 {
                     "Name": "Morning",
                     "StartTime": "00:00:00",
                     "EndTime": "12:00:00",
-                    "ScaleProfile": "LowUse"
+                    "DeploymentProfile": "LowUse"
                 },
                 {
                     "Name": "Afternoon",
                     "StartTime": "12:00:00",
                     "EndTime": "18:00:00",
-                    "ScaleProfile": "HighUse" 
-                }
-            ],
-            "Tuesday":[
-                {
-                    "Name": "Morning",
-                    "StartTime": "00:00:00",
-                    "EndTime": "12:00:00",
-                    "ScaleProfile": "LowUse"
-                },
-                {
-                    "Name": "Afternoon",
-                    "StartTime": "12:00:00",
-                    "EndTime": "20:00:00",
-                    "ScaleProfile": "HighUse" 
-                }
-            ],
-            "Wednesday":[
-                {
-                    "Name": "Morning",
-                    "StartTime": "00:00:00",
-                    "EndTime": "12:00:00",
-                    "ScaleProfile": "LowUse"
-                },
-                {
-                    "Name": "Afternoon",
-                    "StartTime": "12:00:00",
-                    "EndTime": "20:00:00",
-                    "ScaleProfile": "HighUse" 
-                }
-            ],
-            "Thursday":[
-                {
-                    "Name": "Morning",
-                    "StartTime": "00:00:00",
-                    "EndTime": "12:00:00",
-                    "ScaleProfile": "LowUse"
-                },
-                {
-                    "Name": "Afternoon",
-                    "StartTime": "12:00:00",
-                    "EndTime": "20:00:00",
-                    "ScaleProfile": "HighUse" 
-                }
-            ],
-            "Friday":[
-                {
-                    "Name": "Morning",
-                    "StartTime": "00:00:00",
-                    "EndTime": "12:00:00",
-                    "ScaleProfile": "LowUse"
-                },
-                {
-                    "Name": "Afternoon",
-                    "StartTime": "12:00:00",
-                    "EndTime": "20:00:00",
-                    "ScaleProfile": "HighUse" 
-                }
-            ],
-            "Saturday":[
-                {
-                    "Name": "Morning",
-                    "StartTime": "00:00:00",
-                    "EndTime": "12:00:00",
-                    "ScaleProfile": "LowUse"
-                },
-                {
-                    "Name": "Afternoon",
-                    "StartTime": "12:00:00",
-                    "EndTime": "20:00:00",
-                    "ScaleProfile": "HighUse" 
-                }
-            ],
-            "Sunday":[
-                {
-                    "Name": "Morning",
-                    "StartTime": "00:00:00",
-                    "EndTime": "12:00:00",
-                    "ScaleProfile": "LowUse"
-                },
-                {
-                    "Name": "Afternoon",
-                    "StartTime": "12:00:00",
-                    "EndTime": "20:00:00",
-                    "ScaleProfile": "HighUse" 
+                    "DeploymentProfile": "HighUse" 
                 }
             ]
         },
-    "ScaleProfiles": 
         {
-            "LowUse": {
-                "instanceCount": 1,
-                "minInstances": 2,
-                "maxInstances": 3,
-                "ScaleOutStep": 1,
-                "ScaleInStep": 3
-            },
-            "HighUse": {
-                "instanceCount": 3,
-                "minInstances": 2,
-                "maxInstances": 3,
-                "ScaleOutStep": 1,
-                "ScaleInStep": 3
-            }
+            "Name": "Tuesday",
+            "Profiles": [
+                {
+                    "Name": "Morning",
+                    "StartTime": "00:00:00",
+                    "EndTime": "12:00:00",
+                    "DeploymentProfile": "LowUse"
+                },
+                {
+                    "Name": "Afternoon",
+                    "StartTime": "12:00:00",
+                    "EndTime": "18:00:00",
+                    "DeploymentProfile": "HighUse" 
+                }
+            ]
+        },
+        {
+            "Name": "Wednesday",
+            "Profiles": [
+                {
+                    "Name": "Morning",
+                    "StartTime": "00:00:00",
+                    "EndTime": "12:00:00",
+                    "DeploymentProfile": "LowUse"
+                },
+                {
+                    "Name": "Afternoon",
+                    "StartTime": "12:00:00",
+                    "EndTime": "18:00:00",
+                    "DeploymentProfile": "HighUse" 
+                }
+            ]
+        },
+        {
+            "Name": "Thursday",
+            "Profiles": [
+                {
+                    "Name": "Morning",
+                    "StartTime": "00:00:00",
+                    "EndTime": "12:00:00",
+                    "DeploymentProfile": "LowUse"
+                },
+                {
+                    "Name": "Afternoon",
+                    "StartTime": "12:00:00",
+                    "EndTime": "18:00:00",
+                    "DeploymentProfile": "HighUse" 
+                }
+            ]
+        },
+        {
+            "Name": "Friday",
+            "Profiles": [
+                {
+                    "Name": "Morning",
+                    "StartTime": "00:00:00",
+                    "EndTime": "12:00:00",
+                    "DeploymentProfile": "LowUse"
+                },
+                {
+                    "Name": "Afternoon",
+                    "StartTime": "12:00:00",
+                    "EndTime": "18:00:00",
+                    "DeploymentProfile": "HighUse" 
+                }
+            ]
+        },
+        {
+            "Name": "Saturday",
+            "Profiles": [
+                {
+                    "Name": "Morning",
+                    "StartTime": "00:00:00",
+                    "EndTime": "12:00:00",
+                    "DeploymentProfile": "LowUse"
+                },
+                {
+                    "Name": "Afternoon",
+                    "StartTime": "12:00:00",
+                    "EndTime": "18:00:00",
+                    "DeploymentProfile": "HighUse" 
+                }
+            ]
+        },
+        {
+            "Name": "Sunday",
+            "Profiles": [
+                {
+                    "Name": "Morning",
+                    "StartTime": "00:00:00",
+                    "EndTime": "12:00:00",
+                    "DeploymentProfile": "LowUse"
+                },
+                {
+                    "Name": "Afternoon",
+                    "StartTime": "12:00:00",
+                    "EndTime": "18:00:00",
+                    "DeploymentProfile": "HighUse" 
+                }
+            ]
         }
-    
+    ],
+    "DeploymentProfiles": [
+        {
+            "Name": "LowUse",
+            "instanceCount": 1,
+            "minInstances": 2,
+            "maxInstances": 3,
+            "ScaleOutStep": 1,
+            "ScaleInStep": 3
+        },
+        {
+            "Name": "HighUse",
+            "instanceCount": 2,
+            "minInstances": 2,
+            "maxInstances": 3,
+            "ScaleOutStep": 1,
+            "ScaleInStep": 3
+        }
+    ]
 }

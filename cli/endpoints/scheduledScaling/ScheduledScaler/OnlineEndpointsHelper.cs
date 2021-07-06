@@ -73,7 +73,6 @@ namespace Microsoft.AzureML.OnlineEndpoints.RecipeFunction
                 return onlineDeploymentTrackedResource;
             
             } catch (Exception e){
-                
                 logger.LogInformation($"An Exception was thrown {e.Message}");
                 throw new Exception();
             }

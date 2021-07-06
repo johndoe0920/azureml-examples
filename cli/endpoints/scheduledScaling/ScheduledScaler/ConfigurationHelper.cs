@@ -1,6 +1,6 @@
+using System;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
 namespace Microsoft.AzureML.OnlineEndpoints.RecipeFunction
@@ -13,14 +13,10 @@ namespace Microsoft.AzureML.OnlineEndpoints.RecipeFunction
         public static IConfigurationRoot GetConfiguration(string appDirectory, ILogger log)
         {
             var config = new ConfigurationBuilder()
-                    .SetBasePath(appDirectory)
-                    .AddJsonFile("local.settings.json", optional: true, reloadOnChange: true)
-                    .AddJsonFile("recipe.settings.json", optional: false, reloadOnChange: true)
-                    // .AddEnvironmentVariables()
-                    .Build();
-
-            // log.LogInformation(JsonConvert.SerializeObject(SerializeConfig(config)));
-
+                .SetBasePath(appDirectory)
+                .AddJsonFile("local.settings.json", optional: true, reloadOnChange: true)
+                .AddJsonFile("recipe.settings.json", optional: false, reloadOnChange: true)
+                .Build();
             return config;
         }
         
@@ -38,8 +34,29 @@ namespace Microsoft.AzureML.OnlineEndpoints.RecipeFunction
             return obj;
         }
 
-        public static string GetResourceID(IConfigurationRoot config){
-            return $"subscriptions/{config["Subscription"]}/resourceGroups/{config["ResourceGroup"]}/providers/Microsoft.MachineLearningServices/workspaces/{config["Workspace"]}/onlineEndpoints/{config["Endpoint"]}/deployments/{config["Deployment"]}";
+        public static bool VerifyConfigValues(
+            IConfigurationRoot config,
+            ILogger logger
+        ){
+            VerifyConfigValue(config, "Subscription", logger);
+            VerifyConfigValue(config, "ResourceGroup", logger);
+            VerifyConfigValue(config, "Workspace", logger);
+            VerifyConfigValue(config, "Endpoint", logger);
+            VerifyConfigValue(config, "Deployment", logger);
+            VerifyConfigValue(config, "ContainerName", logger);
+            VerifyConfigValue(config, "ScheduleFileName", logger);
+            return true;
+        }
+
+        public static bool VerifyConfigValue(
+            IConfigurationRoot config,
+            string configKey,
+            ILogger logger
+        ){
+            if(String.IsNullOrEmpty(config[configKey])){
+                throw new ArgumentNullException($"{configKey} is not set. Please make sure this variable is set to ensure the function runs properly.");
+            }
+            return true;
         }
     }
 }
