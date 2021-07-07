@@ -2,9 +2,11 @@ namespace Microsoft.AzureML.OnlineEndpoints.RecipeFunction
 {
     public class ScaleSchedule{
 
-        public string DefaultScaleProfile{get;set;}
-        public DaySettings[] Days{get;set;}
-        public DeploymentProfile[] DeploymentProfiles{get;set;}
+        public string DefaultScaleProfile {get;set;}
+        public DaySettings[] Days {get;set;}
+        public DeploymentProfile[] DeploymentProfiles {get;set;}
+
+        public TimeSlot[] TimeSlots {get;set;}
 
     }
 
@@ -14,10 +16,14 @@ namespace Microsoft.AzureML.OnlineEndpoints.RecipeFunction
     }
 
     public class ScaleProfile{
+        public string TimeSlot {get;set;}
+        public string DeploymentProfile {get;set;}
+    }
+
+    public class TimeSlot{
         public string Name {get;set;}
         public string StartTime {get;set;}
         public string EndTime {get;set;}
-        public string DeploymentProfile {get;set;}
     }
 
     public class DeploymentProfile{

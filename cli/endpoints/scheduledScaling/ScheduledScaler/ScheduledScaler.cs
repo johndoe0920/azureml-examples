@@ -73,7 +73,5 @@ namespace Microsoft.AzureML.OnlineEndpoints.RecipeFunction
         ){
             await OnlineEndpointsHelper.UpdateDeploymentResource(config, onlineDeployment, workspaceClient, deploymentProfile.instanceCount, logger);
         }
-
-        
     }
 }

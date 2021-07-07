@@ -5,15 +5,11 @@
             "Name": "Monday",
             "Profiles": [
                 {
-                    "Name": "Morning",
-                    "StartTime": "00:00:00",
-                    "EndTime": "12:00:00",
+                    "TimeSlot": "Morning",
                     "DeploymentProfile": "LowUse"
                 },
                 {
-                    "Name": "Afternoon",
-                    "StartTime": "12:00:00",
-                    "EndTime": "18:00:00",
+                    "TimeSlot": "Afternoon",
                     "DeploymentProfile": "HighUse" 
                 }
             ]
@@ -22,15 +18,11 @@
             "Name": "Tuesday",
             "Profiles": [
                 {
-                    "Name": "Morning",
-                    "StartTime": "00:00:00",
-                    "EndTime": "12:00:00",
+                    "TimeSlot": "Morning",
                     "DeploymentProfile": "LowUse"
                 },
                 {
-                    "Name": "Afternoon",
-                    "StartTime": "12:00:00",
-                    "EndTime": "18:00:00",
+                    "TimeSlot": "Afternoon",
                     "DeploymentProfile": "HighUse" 
                 }
             ]
@@ -39,15 +31,11 @@
             "Name": "Wednesday",
             "Profiles": [
                 {
-                    "Name": "Morning",
-                    "StartTime": "00:00:00",
-                    "EndTime": "12:00:00",
+                    "TimeSlot": "Morning",
                     "DeploymentProfile": "LowUse"
                 },
                 {
-                    "Name": "Afternoon",
-                    "StartTime": "12:00:00",
-                    "EndTime": "18:00:00",
+                    "TimeSlot": "Afternoon",
                     "DeploymentProfile": "HighUse" 
                 }
             ]
@@ -56,15 +44,11 @@
             "Name": "Thursday",
             "Profiles": [
                 {
-                    "Name": "Morning",
-                    "StartTime": "00:00:00",
-                    "EndTime": "12:00:00",
+                    "TimeSlot": "Morning",
                     "DeploymentProfile": "LowUse"
                 },
                 {
-                    "Name": "Afternoon",
-                    "StartTime": "12:00:00",
-                    "EndTime": "18:00:00",
+                    "TimeSlot": "Afternoon",
                     "DeploymentProfile": "HighUse" 
                 }
             ]
@@ -73,15 +57,11 @@
             "Name": "Friday",
             "Profiles": [
                 {
-                    "Name": "Morning",
-                    "StartTime": "00:00:00",
-                    "EndTime": "12:00:00",
+                    "TimeSlot": "Morning",
                     "DeploymentProfile": "LowUse"
                 },
                 {
-                    "Name": "Afternoon",
-                    "StartTime": "12:00:00",
-                    "EndTime": "18:00:00",
+                    "TimeSlot": "Afternoon",
                     "DeploymentProfile": "HighUse" 
                 }
             ]
@@ -90,15 +70,11 @@
             "Name": "Saturday",
             "Profiles": [
                 {
-                    "Name": "Morning",
-                    "StartTime": "00:00:00",
-                    "EndTime": "12:00:00",
+                    "TimeSlot": "Morning",
                     "DeploymentProfile": "LowUse"
                 },
                 {
-                    "Name": "Afternoon",
-                    "StartTime": "12:00:00",
-                    "EndTime": "18:00:00",
+                    "TimeSlot": "Afternoon",
                     "DeploymentProfile": "HighUse" 
                 }
             ]
@@ -107,18 +83,26 @@
             "Name": "Sunday",
             "Profiles": [
                 {
-                    "Name": "Morning",
-                    "StartTime": "00:00:00",
-                    "EndTime": "12:00:00",
+                    "TimeSlot": "Morning",
                     "DeploymentProfile": "LowUse"
                 },
                 {
-                    "Name": "Afternoon",
-                    "StartTime": "12:00:00",
-                    "EndTime": "18:00:00",
+                    "TimeSlot": "Afternoon",
                     "DeploymentProfile": "HighUse" 
                 }
             ]
+        }
+    ],
+    "TimeSlots": [
+        {
+            "Name": "Morning",
+            "StartTime": "00:00:00",
+            "EndTime": "12:00:00"
+        },
+        {
+            "Name": "Afternoon",
+            "StartTime": "12:00:00",
+            "EndTime": "18:00:00"
         }
     ],
     "DeploymentProfiles": [
