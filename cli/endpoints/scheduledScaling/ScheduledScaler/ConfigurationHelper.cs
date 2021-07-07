@@ -13,9 +13,7 @@ namespace Microsoft.AzureML.OnlineEndpoints.RecipeFunction
         public static IConfigurationRoot GetConfiguration(string appDirectory, ILogger log)
         {
             var config = new ConfigurationBuilder()
-                .SetBasePath(appDirectory)
-                .AddJsonFile("local.settings.json", optional: true, reloadOnChange: true)
-                .AddJsonFile("recipe.settings.json", optional: false, reloadOnChange: true)
+                .AddEnvironmentVariables()
                 .Build();
             return config;
         }
@@ -38,11 +36,11 @@ namespace Microsoft.AzureML.OnlineEndpoints.RecipeFunction
             IConfigurationRoot config,
             ILogger logger
         ){
-            VerifyConfigValue(config, "Subscription", logger);
-            VerifyConfigValue(config, "ResourceGroup", logger);
-            VerifyConfigValue(config, "Workspace", logger);
-            VerifyConfigValue(config, "Endpoint", logger);
-            VerifyConfigValue(config, "Deployment", logger);
+            VerifyConfigValue(config, "SubscriptionID", logger);
+            VerifyConfigValue(config, "WorkspaceResourceGroupName", logger);
+            VerifyConfigValue(config, "WorkspaceName", logger);
+            VerifyConfigValue(config, "EndpointName", logger);
+            VerifyConfigValue(config, "DeploymentName", logger);
             VerifyConfigValue(config, "ContainerName", logger);
             VerifyConfigValue(config, "ScheduleFileName", logger);
             return true;

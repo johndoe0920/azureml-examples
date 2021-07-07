@@ -2,11 +2,32 @@
     "$": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-        "baseName": {
+        "BaseName": {
             "value": "ScheduledScaler"
         },
         "GitHubBranch": {
             "value": "users/rowagne/create_scheduled_scaling"
+        },
+        "IdentityName": {
+            "value": "rowagne-msi"
+        },
+        "WorkspaceResourceGroupName": {
+            "value": "rowagne-test"
+        },
+        "SubscriptionID": {
+            "value": "1b07a84a-773b-476e-8f48-664bfc72d7d6"
+        },
+        "EndpointName": {
+            "value": "rowagne-bad-ep-1"
+        },
+        "DeploymentName": {
+            "value": "blue-1"
+        },
+        "ContainerName": {
+            "value": "scheduled-scaler"
+        },
+        "ScheduleFileName": {
+            "value": "schedule.json"
         }
     }
 }

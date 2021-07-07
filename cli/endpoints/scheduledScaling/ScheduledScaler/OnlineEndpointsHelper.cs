@@ -15,17 +15,16 @@ namespace Microsoft.AzureML.OnlineEndpoints.RecipeFunction
     /// </summary>
     public class OnlineEndpointsHelper
     {
-        // public static async Task<OnlineDeploymentTrackedResource> GetDeploymentResource(
         public static OnlineDeploymentTrackedResource GetDeploymentResource(
             IConfigurationRoot config, 
             AzureMachineLearningWorkspacesClient workspaceClient,
             ILogger logger
         ){
             return workspaceClient.OnlineDeployments.Get(
-                    config["Endpoint"], 
-                    config["Deployment"], 
-                    config["ResourceGroup"], 
-                    config["Workspace"]
+                    config["EndpointName"], 
+                    config["DeploymentName"], 
+                    config["WorkspaceResourceGroupName"], 
+                    config["WorkspaceName"]
                 );
         }
 
@@ -63,10 +62,10 @@ namespace Microsoft.AzureML.OnlineEndpoints.RecipeFunction
 
                 OnlineDeploymentTrackedResource onlineDeploymentTrackedResource = 
                     await workspaceClient.OnlineDeployments.CreateOrUpdateAsync(
-                        config["Endpoint"], 
-                        config["Deployment"], 
-                        config["ResourceGroup"], 
-                        config["Workspace"], 
+                        config["EndpointName"], 
+                        config["DeploymentName"], 
+                        config["WorkspaceResourceGroupName"], 
+                        config["WorkspaceName"], 
                         newOnlineDeployment
                     );
 

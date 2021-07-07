@@ -30,19 +30,19 @@ namespace Microsoft.AzureML.OnlineEndpoints.RecipeFunction
 
             var accessToken = OnlineEndpointsHelper.GetToken(config, logger).Result;
             logger.LogInformation($"Getting workspace client");
-            var workspaceClient = OnlineEndpointsHelper.CreateMachineLearningWorkspacesClientAsync(accessToken, config["Subscription"]);
+            var workspaceClient = OnlineEndpointsHelper.CreateMachineLearningWorkspacesClientAsync(accessToken, config["SubscriptionID"]);
             logger.LogInformation($"Got workspace client");
             
-            logger.LogInformation($"Getting config for deployment {config["Deployment"]}");
+            logger.LogInformation($"Getting config for deployment {config["DeploymentName"]}");
             var onlineDeployment = OnlineEndpointsHelper.GetDeploymentResource(config, workspaceClient, logger);
-            logger.LogInformation($"Successfully retrieved config for deployment {config["Deployment"]}");
+            logger.LogInformation($"Successfully retrieved config for deployment {config["DeploymentName"]}");
 
             var changeNeeded = CompareDeploymentSettings(deploymentProfile, onlineDeployment, logger);
 
             if (changeNeeded){
-                logger.LogInformation($"Updating deployment {config["Deployment"]}");
+                logger.LogInformation($"Updating deployment {config["DeploymentName"]}");
                 var result = UpdateOnlineDeployment(config, onlineDeployment, workspaceClient, deploymentProfile, logger);
-                logger.LogInformation($"Successfully updated deployment {config["Deployment"]}");
+                logger.LogInformation($"Successfully updated deployment {config["DeploymentName"]}");
             }
         }
 

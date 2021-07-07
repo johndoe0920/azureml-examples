@@ -73,8 +73,7 @@ namespace Microsoft.AzureML.OnlineEndpoints.RecipeFunction
         public static string GetCurrentTimeSlot(
             ScaleSchedule scheduleJson,
             ILogger logger
-        )
-        {
+        ){
             var currentTime = DateTime.Now.ToString("HH:mm:ss");
             var dayOfWeek = DateTime.Now.DayOfWeek;
 

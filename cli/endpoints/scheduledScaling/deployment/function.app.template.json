@@ -2,7 +2,7 @@
     "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-      "baseName": {
+      "BaseName": {
         "defaultValue": "ScheduledScaler",
         "type": "string",
         "metadata": {
@@ -16,21 +16,57 @@
           "description": "Name of the branch to use when deploying (Default = main)."
         }
       },
-      "identityName": {
+      "IdentityName": {
         "type": "string",
         "defaultValue": "rowagne-msi",
         "metadata": {
           "description": "Name for the managed identity created for the azure function to access the workspace."
         }
+      },
+      "WorkspaceResourceGroupName": {
+        "type": "string",
+        "metadata": {
+          "description": "Name of the resource group where your workspace exists."
+        }
+      },
+      "SubscriptionID": {
+        "type": "string",
+        "metadata": {
+          "description": "Name of the resource group where your workspace exists."
+        }
+      },
+      "EndpointName": {
+        "type": "string",
+        "metadata": {
+          "description": "Name of the resource group where your workspace exists."
+        }
+      },
+      "DeploymentName": {
+        "type": "string",
+        "metadata": {
+          "description": "Name of the resource group where your workspace exists."
+        }
+      },
+      "ContainerName": {
+        "type": "string",
+        "metadata": {
+          "description": "Name of the resource group where your workspace exists."
+        }
+      },
+      "ScheduleFileName": {
+        "type": "string",
+        "metadata": {
+          "description": "Name of the resource group where your workspace exists."
+        }
       }
     },
     "variables": {
-      "identityName": "[parameters('identityName')]",
-      "funcAppName": "[toLower(concat(parameters('baseName')))]",
-      "funcStorageName": "[tolower(concat(substring(parameters('baseName'), 0, min(length(parameters('baseName')),16)), 'stg'))]",
-      "serverFarmName": "[concat(substring(parameters('baseName'), 0, min(length(parameters('baseName')),14)), '-srv')]",
+      "IdentityName": "[parameters('IdentityName')]",
+      "funcAppName": "[toLower(concat(parameters('BaseName')))]",
+      "funcStorageName": "[tolower(concat(substring(parameters('BaseName'), 0, min(length(parameters('BaseName')),16)), 'stg'))]",
+      "serverFarmName": "[concat(substring(parameters('BaseName'), 0, min(length(parameters('BaseName')),14)), '-srv')]",
       "repoURL": "https://github.com/johndoe0920/azureml-examples.git",
-      "applicationInsightsName": "[parameters('baseName')]",
+      "applicationInsightsName": "[parameters('BaseName')]",
       "msiUsePrefix": "RunAs=App;AppId="
     },
     "resources": [
@@ -43,13 +79,13 @@
         "identity": {
           "type": "UserAssigned",
           "userAssignedIdentities": {
-              "[resourceId('Microsoft.ManagedIdentity/userAssignedIdentities', variables('identityName'))]": {}
+              "[resourceId('Microsoft.ManagedIdentity/userAssignedIdentities', variables('IdentityName'))]": {}
           }
         },
         "dependsOn": [
           "[resourceId('Microsoft.Web/serverfarms',variables('serverFarmName'))]",
           "[resourceId('Microsoft.Storage/storageAccounts', variables('funcStorageName'))]",
-          "[resourceId('Microsoft.ManagedIdentity/userAssignedIdentities', variables('identityName'))]"
+          "[resourceId('Microsoft.ManagedIdentity/userAssignedIdentities', variables('IdentityName'))]"
         ],
         "properties": {
           "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('serverFarmName'))]",
@@ -84,8 +120,32 @@
                 "value": "[reference(resourceId('microsoft.insights/components', variables('applicationInsightsName')), '2020-02-02-preview').InstrumentationKey]"
               },
               {
-                "name": "AzureServicesAuthConnectionString ",
-                "value": "[concat(variables('msiUsePrefix'), reference(resourceId('Microsoft.ManagedIdentity/userAssignedIdentities', variables('identityName'))).clientId)]"
+                "name": "AzureServicesAuthConnectionString",
+                "value": "[concat(variables('msiUsePrefix'), reference(resourceId('Microsoft.ManagedIdentity/userAssignedIdentities', variables('IdentityName'))).clientId)]"
+              },
+              {
+                "name": "WorkspaceResourceGroupName",
+                "value": "[parameters('WorkspaceResourceGroupName')]"
+              },
+              {
+                "name": "SubscriptionID",
+                "value": "[parameters('SubscriptionID')]"
+              },
+              {
+                "name": "EndpointName",
+                "value": "[parameters('EndpointName')]"
+              },
+              {
+                "name": "DeploymentName",
+                "value": "[parameters('DeploymentName')]"
+              },
+              {
+                "name": "ContainerName",
+                "value": "[parameters('ContainerName')]"
+              },
+              {
+                "name": "ScheduleFileName",
+                "value": "[parameters('ScheduleFileName')]"
               }
             ]
           }
@@ -110,7 +170,7 @@
       {
         "type": "Microsoft.ManagedIdentity/userAssignedIdentities",
         "apiVersion": "2018-11-30",
-        "name": "[variables('identityName')]",
+        "name": "[variables('IdentityName')]",
         "location": "[resourceGroup().location]"
       },
       {
@@ -119,7 +179,7 @@
         "name": "[variables('funcStorageName')]",
         "location": "[resourceGroup().location]",
         "tags": {
-          "displayName": "funStorageName"
+          "displayName": "[variables('funcStorageName')]"
         },
         "sku": {
           "name": "Standard_LRS"
@@ -129,7 +189,7 @@
           {
             "type": "blobServices/containers",
             "apiVersion": "2018-07-01",
-            "name": "[concat('default/', 'scheduled-scaler')]",
+            "name": "[concat('default/', parameters('ContainerName'))]",
             "dependsOn": [
               "[variables('funcStorageName')]"
             ],
@@ -166,6 +226,5 @@
           "Request_Source": "IbizaWebAppExtensionCreate"
         }
       }
-    ],
-    "outputs": {}
+    ]
   }
