@@ -11,6 +11,7 @@
       },
       "GitHubBranch": {
         "type": "string",
+        "defaultValue": "main",
         "metadata": {
           "description": "Name of the branch to use when deploying."
         }

@@ -1,9 +1,9 @@
 {
     "IsEncrypted": false,
     "Subscription": "1b07a84a-773b-476e-8f48-664bfc72d7d6",
-    "ResourceGroup": "rowagne-test",
-    "Workspace": "rowagne-ws",
-    "Endpoint": "rowagne-bad-ep-1",
+    "ResourceGroup": "testtest",
+    "Workspace": "test-ws",
+    "Endpoint": "test-bad-ep-1",
     "Deployment": "blue-1",
     "ContainerName": "scheduled-scaler",
     "ScheduleFileName": "schedule.json"

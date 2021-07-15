@@ -6,31 +6,31 @@
             "value": "ScheduledScaler"
         },
         "GitHubBranch": {
-            "value": "users/rowagne/create_scheduled_scaling"
+            "value": "main"  
         },
         "IdentityName": {
-            "value": "rowagne-msi"
+            "value": "<TODO-MSI-NAME>"
         },
         "WorkspaceResourceGroupName": {
-            "value": "rowagne-test"
+            "value": "<TODO-WS-RG-NAME>"
         },
         "WorkspaceName": {
-            "value": "rowagne-ws"
+            "value": "<TODO-WS-NAME>"
         },
         "SubscriptionID": {
-            "value": "1b07a84a-773b-476e-8f48-664bfc72d7d6"
+            "value": "<TODO-SUB-ID>"
         },
         "EndpointName": {
-            "value": "rowagne-bad-ep-1"
+            "value": "<TODO-ENDPOINT-NAME>"
         },
         "DeploymentName": {
-            "value": "blue-1"
+            "value": "<TODO-DEPLOYMENT-NAME>"
         },
         "ContainerName": {
-            "value": "scheduled-scaler"
+            "value": "<TODO-CONTAINER-NAME>"
         },
         "ScheduleFileName": {
-            "value": "schedule.json"
+            "value": "<TODO-SCHEDULE-FILE-NAME>"
         }
     }
 }
