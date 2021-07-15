@@ -116,6 +116,10 @@ First you need to upload your schedule json file into the blob container that wa
 
 Second, you need to assign permissions to the newly made MSI named `IdentityName` to your workspace that your deployment belongs to. The role you assign it must have read permissions on your workspace, deployments and endpoints, and write permissions on your deployments. Something like Contributor covers these needs, but may be too powerful of an assignment to give to an MSI for some teams.
 
+## Conclusion
+
+With the schedule file uploaded and the user MSI given the correct permissions, your function should start to operate successfully. You can go to the function itself to view the logs and see if it has succeeded by going to the `Functions` tab in the Function App. The function will execute once every minute and logs usually take about five minutes to show up in the Azure Portal (due to App Insights delay).
+
 ## Further Automation
 
 Currently, this doc is designed to explain how this function works and what's needed to get it working with an existing deployment, workspace, endpoint, etc. However, it should be possible to merge this ARM template and parameters into an existing ARM template used to deploy a workspace, endpoint and deployment to make it a more complete automated system. Since this template tells the Function App to download the source code for the function, the template json is completely transplantable into any ARM deployment template.
