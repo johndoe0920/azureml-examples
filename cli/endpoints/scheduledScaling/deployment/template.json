@@ -6,19 +6,17 @@
         "defaultValue": "ScheduledScaler",
         "type": "string",
         "metadata": {
-          "description": "Name use as base-template to named the resources deployed in Azure."
+          "description": "Name used as a base template to named the resources deployed in Azure."
         }
       },
       "GitHubBranch": {
         "type": "string",
-        "defaultValue": "users/rowagne/create_scheduled_scaling",
         "metadata": {
-          "description": "Name of the branch to use when deploying (Default = main)."
+          "description": "Name of the branch to use when deploying."
         }
       },
       "IdentityName": {
         "type": "string",
-        "defaultValue": "rowagne-msi",
         "metadata": {
           "description": "Name for the managed identity created for the azure function to access the workspace."
         }
@@ -32,31 +30,37 @@
       "SubscriptionID": {
         "type": "string",
         "metadata": {
-          "description": "Name of the resource group where your workspace exists."
+          "description": "Subscription ID where you want to deploy to."
+        }
+      },
+      "WorkspaceName": {
+        "type": "string",
+        "metadata": {
+          "description": "Name of your workspace that holds your endpoint and deployment."
         }
       },
       "EndpointName": {
         "type": "string",
         "metadata": {
-          "description": "Name of the resource group where your workspace exists."
+          "description": "Name of the endpoint that serves your deployment."
         }
       },
       "DeploymentName": {
         "type": "string",
         "metadata": {
-          "description": "Name of the resource group where your workspace exists."
+          "description": "Name of the deployment you want to set a scaling schedule."
         }
       },
       "ContainerName": {
         "type": "string",
         "metadata": {
-          "description": "Name of the resource group where your workspace exists."
+          "description": "Name of the storage container where your schedule json file will be."
         }
       },
       "ScheduleFileName": {
         "type": "string",
         "metadata": {
-          "description": "Name of the resource group where your workspace exists."
+          "description": "Name of the schedule file you want to use for the scaling."
         }
       }
     },
@@ -126,6 +130,10 @@
               {
                 "name": "WorkspaceResourceGroupName",
                 "value": "[parameters('WorkspaceResourceGroupName')]"
+              },
+              {
+                "name": "WorkspaceName",
+                "value": "[parameters('WorkspaceName')]"
               },
               {
                 "name": "SubscriptionID",

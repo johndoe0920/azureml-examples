@@ -14,6 +14,9 @@
         "WorkspaceResourceGroupName": {
             "value": "rowagne-test"
         },
+        "WorkspaceName": {
+            "value": "rowagne-ws"
+        },
         "SubscriptionID": {
             "value": "1b07a84a-773b-476e-8f48-664bfc72d7d6"
         },
