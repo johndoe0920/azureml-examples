@@ -4,6 +4,10 @@ This project is a solution to address scheduled scaling for online endpoints and
 
 This solution uses a simple C# project that runs in Azure Functions. It's intended to be deployed via an ARM deployment using the template files in the `deployment` folder and sets up all the necessary resources to set up scheduling for your deployment.
 
+## Video Demo
+
+We have a recorded demo that explains the basics of how this works [here](https://microsoft-my.sharepoint.com/:v:/p/rowagne/ETDcQO0RbhdPgUO4LGbO0wcBJHtTUF1Bnp3XtWD8N0zIUw?email=Ross.Wagner%40microsoft.com).
+
 ## Prerequisities
 
 In order to properly use this solution, it is expected:
