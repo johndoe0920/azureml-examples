@@ -9,8 +9,8 @@ This solution uses a simple C# project that runs in Azure Functions. It's intend
 In order to properly use this solution, it is expected:
 
 1. You have an existing workspace, endpoint and deployment created.
-2. You have permissions to add a user create system identity (MSI) to the workspace and permissions to create resources inside the subscription.
-3. A version of the `az cli` that can perform and ARM template deployment.
+1. You have permissions to add a user create system identity (MSI) to the workspace and permissions to create resources inside the subscription.
+1. A version of the `az cli` that can perform an ARM template deployment.
 
 ## Define Parameters For Deployment
 
